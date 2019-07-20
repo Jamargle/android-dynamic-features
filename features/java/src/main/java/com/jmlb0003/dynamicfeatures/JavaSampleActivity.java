@@ -14,21 +14,23 @@
  * limitations under the License.
  */
 
-package com.google.android.samples.dynamicfeatures
+package com.jmlb0003.dynamicfeatures;
 
-import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
-import com.google.android.play.core.splitcompat.SplitCompat
+import android.os.Bundle;
+
+import androidx.annotation.Nullable;
+
+import com.jmlb0003.dynamicfeatures.java.R;
 
 /**
- * This base activity unifies calls to attachBaseContext as described in:
- * https://developer.android.com/guide/app-bundle/playcore#invoke_splitcompat_at_runtime
+ * A simple activity displaying text written in Java.
  */
-abstract class BaseSplitActivity : AppCompatActivity() {
+public class JavaSampleActivity extends BaseSplitActivity {
 
-    override fun attachBaseContext(newBase: Context?) {
-        super.attachBaseContext(newBase)
-        SplitCompat.install(this)
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_feature_java);
     }
 
 }

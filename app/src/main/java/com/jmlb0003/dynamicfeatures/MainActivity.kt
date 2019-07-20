@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.android.samples.dynamicfeatures
+package com.jmlb0003.dynamicfeatures
 
 import android.content.Intent
 import android.os.Bundle
@@ -26,17 +26,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.Group
-import com.google.android.play.core.splitinstall.SplitInstallManager
-import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
-import com.google.android.play.core.splitinstall.SplitInstallRequest
-import com.google.android.play.core.splitinstall.SplitInstallSessionState
-import com.google.android.play.core.splitinstall.SplitInstallStateUpdatedListener
+import com.google.android.play.core.splitinstall.*
 import com.google.android.play.core.splitinstall.model.SplitInstallSessionStatus
 
-private const val packageName = "com.google.android.samples.dynamicfeatures.ondemand"
+private const val packageName = BuildConfig.APPLICATION_ID
 private const val kotlinSampleClassname = "$packageName.KotlinSampleActivity"
 private const val javaSampleClassname = "$packageName.JavaSampleActivity"
-private const val nativeSampleClassname = "$packageName.NativeSampleActivity"
 
 /** Activity that displays buttons and handles loading of feature modules. */
 class MainActivity : AppCompatActivity() {
@@ -72,7 +67,6 @@ class MainActivity : AppCompatActivity() {
 
     private val moduleKotlin by lazy { getString(R.string.module_feature_kotlin) }
     private val moduleJava by lazy { getString(R.string.module_feature_java) }
-    private val moduleNative by lazy { getString(R.string.module_native) }
     private val moduleAssets by lazy { getString(R.string.module_assets) }
 
     private val clickListener by lazy {
@@ -80,7 +74,6 @@ class MainActivity : AppCompatActivity() {
             when (it.id) {
                 R.id.btn_load_kotlin -> loadAndLaunchModule(moduleKotlin)
                 R.id.btn_load_java -> loadAndLaunchModule(moduleJava)
-                R.id.btn_load_native -> loadAndLaunchModule(moduleNative)
                 R.id.btn_load_assets -> loadAndLaunchModule(moduleAssets)
                 R.id.btn_install_all_now -> installAllFeaturesNow()
                 R.id.btn_install_all_deferred -> installAllFeaturesDeferred()
@@ -161,7 +154,7 @@ class MainActivity : AppCompatActivity() {
     /** Install all features but do not launch any of them. */
     private fun installAllFeaturesNow() {
         // Request all known modules to be downloaded in a single session.
-        val moduleNames = listOf(moduleKotlin, moduleJava, moduleNative, moduleAssets)
+        val moduleNames = listOf(moduleKotlin, moduleJava, moduleAssets)
         val requestBuilder = SplitInstallRequest.newBuilder()
 
         moduleNames.forEach { name ->
@@ -182,7 +175,7 @@ class MainActivity : AppCompatActivity() {
     /** Install all features deferred. */
     private fun installAllFeaturesDeferred() {
 
-        val modules = listOf(moduleKotlin, moduleJava, moduleAssets, moduleNative)
+        val modules = listOf(moduleKotlin, moduleJava, moduleAssets)
 
         manager.deferredInstall(modules).addOnSuccessListener {
             toastAndLog("Deferred installation of $modules")
@@ -213,7 +206,6 @@ class MainActivity : AppCompatActivity() {
             when (moduleName) {
                 moduleKotlin -> launchActivity(kotlinSampleClassname)
                 moduleJava -> launchActivity(javaSampleClassname)
-                moduleNative -> launchActivity(nativeSampleClassname)
                 moduleAssets -> displayAssets()
             }
         }
@@ -256,7 +248,6 @@ class MainActivity : AppCompatActivity() {
         setClickListener(R.id.btn_load_kotlin, clickListener)
         setClickListener(R.id.btn_load_java, clickListener)
         setClickListener(R.id.btn_load_assets, clickListener)
-        setClickListener(R.id.btn_load_native, clickListener)
         setClickListener(R.id.btn_install_all_now, clickListener)
         setClickListener(R.id.btn_install_all_deferred, clickListener)
         setClickListener(R.id.btn_request_uninstall, clickListener)

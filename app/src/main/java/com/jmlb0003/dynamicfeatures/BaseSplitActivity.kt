@@ -14,31 +14,20 @@
  * limitations under the License.
  */
 
-apply plugin: 'com.android.dynamic-feature'
-apply plugin: 'kotlin-android'
+package com.jmlb0003.dynamicfeatures
 
-android {
+import android.content.Context
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.play.core.splitcompat.SplitCompat
 
-    compileSdkVersion versions.compileSdk
-    defaultConfig {
-        minSdkVersion versions.minSdk
-        targetSdkVersion versions.targetSdk
+/**
+ * This base activity unifies calls to attachBaseContext as described in:
+ * https://developer.android.com/guide/app-bundle/playcore#invoke_splitcompat_at_runtime
+ */
+abstract class BaseSplitActivity : AppCompatActivity() {
 
-        externalNativeBuild {
-            cmake {
-                cppFlags "-std=c++11"
-            }
-        }
-    }
-
-    externalNativeBuild {
-        cmake {
-            path "src/main/cpp/CMakeLists.txt"
-        }
+    override fun attachBaseContext(newBase: Context?) {
+        super.attachBaseContext(newBase)
+        SplitCompat.install(this)
     }
 }
-
-dependencies {
-    implementation project(':app')
-}
-
