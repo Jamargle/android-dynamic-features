@@ -32,6 +32,7 @@ import com.google.android.play.core.splitinstall.model.SplitInstallSessionStatus
 private const val packageName = BuildConfig.APPLICATION_ID
 private const val kotlinSampleClassname = "$packageName.KotlinSampleActivity"
 private const val javaSampleClassname = "$packageName.JavaSampleActivity"
+private const val bancontactActivityName = "$packageName.bancontact.BancontactActivity"
 
 /** Activity that displays buttons and handles loading of feature modules. */
 class MainActivity : AppCompatActivity() {
@@ -67,6 +68,7 @@ class MainActivity : AppCompatActivity() {
 
     private val moduleKotlin by lazy { getString(R.string.module_feature_kotlin) }
     private val moduleJava by lazy { getString(R.string.module_feature_java) }
+    private val bancontactModule by lazy { getString(R.string.module_bancontact) }
     private val moduleAssets by lazy { getString(R.string.module_assets) }
 
     private val clickListener by lazy {
@@ -74,6 +76,7 @@ class MainActivity : AppCompatActivity() {
             when (it.id) {
                 R.id.btn_load_kotlin -> loadAndLaunchModule(moduleKotlin)
                 R.id.btn_load_java -> loadAndLaunchModule(moduleJava)
+                R.id.go_to_bancontact_button -> loadAndLaunchModule(bancontactModule)
                 R.id.btn_load_assets -> loadAndLaunchModule(moduleAssets)
                 R.id.btn_install_all_now -> installAllFeaturesNow()
                 R.id.btn_install_all_deferred -> installAllFeaturesDeferred()
@@ -154,7 +157,7 @@ class MainActivity : AppCompatActivity() {
     /** Install all features but do not launch any of them. */
     private fun installAllFeaturesNow() {
         // Request all known modules to be downloaded in a single session.
-        val moduleNames = listOf(moduleKotlin, moduleJava, moduleAssets)
+        val moduleNames = listOf(moduleKotlin, moduleJava, bancontactModule, moduleAssets)
         val requestBuilder = SplitInstallRequest.newBuilder()
 
         moduleNames.forEach { name ->
@@ -175,7 +178,7 @@ class MainActivity : AppCompatActivity() {
     /** Install all features deferred. */
     private fun installAllFeaturesDeferred() {
 
-        val modules = listOf(moduleKotlin, moduleJava, moduleAssets)
+        val modules = listOf(moduleKotlin, moduleJava, moduleAssets, bancontactModule)
 
         manager.deferredInstall(modules).addOnSuccessListener {
             toastAndLog("Deferred installation of $modules")
@@ -206,6 +209,7 @@ class MainActivity : AppCompatActivity() {
             when (moduleName) {
                 moduleKotlin -> launchActivity(kotlinSampleClassname)
                 moduleJava -> launchActivity(javaSampleClassname)
+                bancontactModule -> launchActivity(bancontactActivityName)
                 moduleAssets -> displayAssets()
             }
         }
@@ -248,6 +252,7 @@ class MainActivity : AppCompatActivity() {
         setClickListener(R.id.btn_load_kotlin, clickListener)
         setClickListener(R.id.btn_load_java, clickListener)
         setClickListener(R.id.btn_load_assets, clickListener)
+        setClickListener(R.id.go_to_bancontact_button, clickListener)
         setClickListener(R.id.btn_install_all_now, clickListener)
         setClickListener(R.id.btn_install_all_deferred, clickListener)
         setClickListener(R.id.btn_request_uninstall, clickListener)

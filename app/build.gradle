@@ -44,7 +44,8 @@ android {
     dynamicFeatures = [
             ':features:assets',
             ':features:kotlin',
-            ':features:java'
+            ':features:java',
+            ':bancontact'
     ]
 
 }

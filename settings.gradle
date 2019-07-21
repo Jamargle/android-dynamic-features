@@ -14,4 +14,4 @@
  * limitations under the License.
  */
 
-include ':app', ':features:java', ':features:kotlin', ':features:assets'
+include ':app', ':features:java', ':features:kotlin', ':features:assets', ':bancontact'
