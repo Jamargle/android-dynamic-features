@@ -16,6 +16,7 @@
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
 
@@ -42,12 +43,14 @@ android {
     }
 
     dynamicFeatures = [
-            ':features:assets',
-            ':features:kotlin',
-            ':features:java',
+            ':features:investments',
+            ':features:zoomit',
             ':bancontact'
     ]
+}
 
+androidExtensions {
+    experimental = true
 }
 
 dependencies {
