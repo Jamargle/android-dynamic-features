@@ -53,24 +53,9 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:text="@string/load_feature_zoomit"
-        app:layout_constraintBottom_toTopOf="@id/btn_load_assets"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/go_to_investments_button" />
-
-    <Button
-        android:id="@+id/btn_load_assets"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="@string/load_assets"
-        app:layout_constraintBottom_toTopOf="@id/btn_install_all_now"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/go_to_zoomit_button" />
 
     <Button
         android:id="@+id/btn_install_all_now"
@@ -81,8 +66,7 @@
         android:text="@string/install_all_features_now"
         app:layout_constraintBottom_toTopOf="@id/btn_install_all_deferred"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btn_load_assets" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/btn_install_all_deferred"
@@ -94,8 +78,7 @@
         android:text="@string/install_all_deferred"
         app:layout_constraintBottom_toTopOf="@id/btn_request_uninstall"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btn_install_all_now" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/btn_request_uninstall"
@@ -107,8 +90,7 @@
         android:text="@string/request_uninstall"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btn_install_all_deferred" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <FrameLayout
         android:id="@+id/progress_bar"

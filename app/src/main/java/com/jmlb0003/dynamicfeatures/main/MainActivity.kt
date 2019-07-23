@@ -16,7 +16,6 @@ import com.jmlb0003.dynamicfeatures.dynamicfeaturesutils.ModulesContract.Investm
 import com.jmlb0003.dynamicfeatures.dynamicfeaturesutils.ModulesContract.ZoomitContract
 import kotlinx.android.synthetic.main.activity_main.btn_install_all_deferred
 import kotlinx.android.synthetic.main.activity_main.btn_install_all_now
-import kotlinx.android.synthetic.main.activity_main.btn_load_assets
 import kotlinx.android.synthetic.main.activity_main.btn_request_uninstall
 import kotlinx.android.synthetic.main.activity_main.go_to_bancontact_button
 import kotlinx.android.synthetic.main.activity_main.go_to_investments_button
@@ -46,7 +45,6 @@ class MainActivity : AppCompatActivity() {
                 R.id.go_to_investments_button -> loadAndLaunchModule(InvestmentsContract)
                 R.id.go_to_zoomit_button -> loadAndLaunchModule(ZoomitContract)
                 R.id.go_to_bancontact_button -> loadAndLaunchModule(BancontactContract)
-//                R.id.btn_load_assets -> loadAndLaunchModule(moduleAssets)
                 R.id.btn_install_all_now -> installAllFeaturesNow()
                 R.id.btn_install_all_deferred -> installAllFeaturesDeferred()
                 R.id.btn_request_uninstall -> requestUninstall()
@@ -56,12 +54,12 @@ class MainActivity : AppCompatActivity() {
 
     private val modulesHandler: DynamicModuleHandler by lazy {
         DynamicModuleHandler(
-                manager = SplitInstallManagerFactory.create(this),
-                installingModuleStateCallback = loadingStateListener,
-                installingModuleUserConfirmationCallback = onUserConfirmationCallback,
-                installingModuleOnModuleReadyToLoad = { contract -> onModuleSuccessfulLoad(contract) },
-                installingModuleOnModulesSuccessfulInstalled = { onModulesSuccessfulLoad() },
-                installingModuleErrorCallback = onErrorCallback
+            manager = SplitInstallManagerFactory.create(this),
+            installingModuleStateCallback = loadingStateListener,
+            installingModuleUserConfirmationCallback = onUserConfirmationCallback,
+            installingModuleOnModuleReadyToLoad = { contract -> onModuleSuccessfulLoad(contract) },
+            installingModuleOnModulesSuccessfulInstalled = { onModulesSuccessfulLoad() },
+            installingModuleErrorCallback = onErrorCallback
         )
     }
 
@@ -86,7 +84,6 @@ class MainActivity : AppCompatActivity() {
     private fun initializeViews() {
         go_to_investments_button.setOnClickListener(clickListener)
         go_to_zoomit_button.setOnClickListener(clickListener)
-        btn_load_assets.setOnClickListener(clickListener)
         go_to_bancontact_button.setOnClickListener(clickListener)
         btn_install_all_now.setOnClickListener(clickListener)
         btn_install_all_deferred.setOnClickListener(clickListener)
@@ -133,7 +130,7 @@ class MainActivity : AppCompatActivity() {
      */
     private fun requestUninstall() {
         toastAndLog("Requesting uninstall of all modules." +
-                "This will happen at some point in the future.")
+            "This will happen at some point in the future.")
 
         modulesHandler.requestUninstallAllModules { modules ->
             toastAndLog("Uninstalling $modules")
@@ -147,8 +144,8 @@ class MainActivity : AppCompatActivity() {
      * @param launch `true` if the feature module should be launched, else `false`.
      */
     private fun onModuleSuccessfulLoad(
-            moduleContract: ModulesContract,
-            launch: Boolean = true
+        moduleContract: ModulesContract,
+        launch: Boolean = true
     ) {
 
         if (launch) {
@@ -169,15 +166,15 @@ class MainActivity : AppCompatActivity() {
      */
     private fun launchActivity(className: String) {
         Intent().setClassName(packageName, className)
-                .also {
-                    startActivity(it)
-                }
+            .also {
+                startActivity(it)
+            }
     }
 
     private fun displayLoadingState(
-            totalProgress: Int,
-            currentProgress: Int,
-            message: String
+        totalProgress: Int,
+        currentProgress: Int,
+        message: String
     ) {
         displayProgress()
         with(progress_bar_view) {
