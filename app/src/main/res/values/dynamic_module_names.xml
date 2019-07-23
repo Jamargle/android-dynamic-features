@@ -1,0 +1,6 @@
+<resources>
+    <!-- The app needs to know the title of the modules in advance to add them to the base resource table -->
+    <string name="module__bancontact">Bancontact</string>
+    <string name="module__investments">Investments</string>
+    <string name="module__zoomit">Zoomit</string>
+</resources>

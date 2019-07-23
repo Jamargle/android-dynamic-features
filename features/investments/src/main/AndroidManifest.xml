@@ -5,7 +5,7 @@
 
     <dist:module
         dist:onDemand="true"
-        dist:title="@string/title_investments">
+        dist:title="@string/module__investments">
         <dist:fusing dist:include="true" />
     </dist:module>
 
