@@ -1,4 +1,4 @@
 <resources>
     <string name="title_investments">Investments</string>
-    <string name="investments_text">This is a dynamic feature for investments, written in \nKotlin\n which can be loaded on demand.</string>
+    <string name="investments_text">This is a dynamic module for investments.\nIt contains ~4MB resources\nIt can be loaded on demand.</string>
 </resources>
