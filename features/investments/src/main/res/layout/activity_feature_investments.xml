@@ -7,10 +7,11 @@
     tools:context=".InvestmentsActivity">
 
     <ImageView
+        android:id="@+id/image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/mustang"
-        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/mustang2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -22,9 +23,8 @@
         android:padding="8dp"
         android:text="@string/investments_text"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/image" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

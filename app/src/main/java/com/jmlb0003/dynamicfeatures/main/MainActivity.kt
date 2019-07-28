@@ -16,7 +16,6 @@ import com.jmlb0003.dynamicfeatures.dynamicfeaturesutils.ModulesContract.Investm
 import com.jmlb0003.dynamicfeatures.dynamicfeaturesutils.ModulesContract.ZoomitContract
 import kotlinx.android.synthetic.main.activity_main.btn_install_all_deferred
 import kotlinx.android.synthetic.main.activity_main.btn_install_all_now
-import kotlinx.android.synthetic.main.activity_main.btn_load_assets
 import kotlinx.android.synthetic.main.activity_main.btn_request_uninstall
 import kotlinx.android.synthetic.main.activity_main.go_to_bancontact_button
 import kotlinx.android.synthetic.main.activity_main.go_to_investments_button
@@ -86,7 +85,6 @@ class MainActivity : AppCompatActivity() {
     private fun initializeViews() {
         go_to_investments_button.setOnClickListener(clickListener)
         go_to_zoomit_button.setOnClickListener(clickListener)
-        btn_load_assets.setOnClickListener(clickListener)
         go_to_bancontact_button.setOnClickListener(clickListener)
         btn_install_all_now.setOnClickListener(clickListener)
         btn_install_all_deferred.setOnClickListener(clickListener)
