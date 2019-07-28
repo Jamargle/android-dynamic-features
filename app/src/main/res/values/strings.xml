@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">On Demand Sample</string>
+
+    <string name="investments_user">Investments User</string>
+    <string name="bancontact_user">Bancontact User</string>
+    <string name="user_with_nothing">User with nothing</string>
+
     <string name="load_feature_investments">Start Investments Feature</string>
     <string name="load_feature_zoomit">Start Zoomit Feature</string>
     <string name="load_bancontact_code">Start Bancontact Feature</string>

@@ -1,5 +1,6 @@
 package com.jmlb0003.dynamicfeatures.login
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -15,9 +16,7 @@ import com.jmlb0003.dynamicfeatures.dynamicfeaturesutils.DynamicModuleHandler
 import com.jmlb0003.dynamicfeatures.hideKeyboard
 import com.jmlb0003.dynamicfeatures.main.MainActivity
 import kotlinx.android.synthetic.main.activity_login.buttons
-import kotlinx.android.synthetic.main.activity_login.login_bancontact
 import kotlinx.android.synthetic.main.activity_login.login_button
-import kotlinx.android.synthetic.main.activity_login.login_investments
 import kotlinx.android.synthetic.main.activity_login.password
 import kotlinx.android.synthetic.main.activity_login.progress
 import kotlinx.android.synthetic.main.activity_login.progress_bar
@@ -41,7 +40,7 @@ class LoginActivity : AppCompatActivity() {
                 installingModuleErrorCallback = onErrorCallback
         )
     }
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -72,39 +71,24 @@ class LoginActivity : AppCompatActivity() {
             hideKeyboard()
             displayProgress(true)
             Handler().postDelayed({
-                displayProgress(false)
                 goToMainActivity()
-            }, 2000)
-        }
-
-        login_bancontact.setOnClickListener {
-            hideKeyboard()
-            displayProgress(true)
-            // TODO Download bancontact module in background
-            Toast.makeText(this, "Download bancontact module in background", Toast.LENGTH_SHORT).show()
-
-            Handler().postDelayed({
-                displayProgress(false)
-//                goToMainActivity()
-            }, 2000)
-        }
-
-        login_investments.setOnClickListener {
-            hideKeyboard()
-            displayProgress(true)
-
-            // TODO Download investments module in background
-            Toast.makeText(this, "Download investments module in background", Toast.LENGTH_SHORT).show()
-
-            Handler().postDelayed({
-                displayProgress(false)
-//                goToMainActivity()
             }, 2000)
         }
     }
 
     private fun goToMainActivity() {
-        startActivity(Intent(this, MainActivity::class.java))
+        when (checkNotNull(intent.extras)[USER_TYPE]) {
+            USER_BASIC -> startActivity(Intent(this, MainActivity::class.java))
+
+            USER_WITH_BANCONTACT -> {
+                // TODO Download bancontact module in background
+                startActivity(Intent(this, MainActivity::class.java))
+            }
+            USER_WITH_INVESTMENTS -> {
+                // TODO Download investments module in background
+                startActivity(Intent(this, MainActivity::class.java))
+            }
+        }
     }
 
     private fun displayLoadingState(
@@ -128,6 +112,34 @@ class LoginActivity : AppCompatActivity() {
             buttons.visibility = View.VISIBLE
             View.GONE
         }
+    }
+
+    companion object {
+        private const val USER_TYPE = "key:UserType"
+        private const val USER_BASIC = "param:basic"
+        private const val USER_WITH_BANCONTACT = "param:bancontact"
+        private const val USER_WITH_INVESTMENTS = "param:investments"
+
+        fun openForBasicUser(context: Context) =
+                Intent(context, LoginActivity::class.java).apply {
+                    putExtras(Bundle().apply {
+                        putString(USER_TYPE, USER_BASIC)
+                    })
+                }
+
+        fun openForBancontactUser(context: Context) =
+                Intent(context, LoginActivity::class.java).apply {
+                    putExtras(Bundle().apply {
+                        putString(USER_TYPE, USER_WITH_BANCONTACT)
+                    })
+                }
+
+        fun openForInvestmentsUser(context: Context) =
+                Intent(context, LoginActivity::class.java).apply {
+                    putExtras(Bundle().apply {
+                        putString(USER_TYPE, USER_WITH_INVESTMENTS)
+                    })
+                }
     }
 }
 

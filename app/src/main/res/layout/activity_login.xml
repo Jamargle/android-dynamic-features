@@ -76,37 +76,6 @@
         app:layout_constraintTop_toBottomOf="@+id/progress_bar"
         tools:text="This is a message displayed during loading" />
 
-    <Button
-        android:id="@+id/login_investments"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="48dp"
-        android:layout_marginBottom="64dp"
-        android:text="@string/login_with_bancontact"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintVertical_bias="0.2" />
-
-    <Button
-        android:id="@+id/login_bancontact"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="48dp"
-        android:layout_marginBottom="64dp"
-        android:text="@string/login_with_investments"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/login_investments"
-        app:layout_constraintVertical_bias="0.2" />
-
     <androidx.constraintlayout.widget.Group
         android:id="@+id/progress"
         android:layout_width="wrap_content"
@@ -118,6 +87,6 @@
         android:id="@+id/buttons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="login_bancontact,login_investments,login_button,password,username" />
+        app:constraint_referenced_ids="login_button,password,username" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
