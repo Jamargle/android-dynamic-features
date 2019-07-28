@@ -13,9 +13,11 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
 import com.jmlb0003.dynamicfeatures.R
 import com.jmlb0003.dynamicfeatures.dynamicfeaturesutils.DynamicModuleHandler
+import com.jmlb0003.dynamicfeatures.dynamicfeaturesutils.ModulesContract
 import com.jmlb0003.dynamicfeatures.hideKeyboard
 import com.jmlb0003.dynamicfeatures.main.MainActivity
 import kotlinx.android.synthetic.main.activity_login.buttons
+import kotlinx.android.synthetic.main.activity_login.debug_text
 import kotlinx.android.synthetic.main.activity_login.login_button
 import kotlinx.android.synthetic.main.activity_login.password
 import kotlinx.android.synthetic.main.activity_login.progress
@@ -60,6 +62,15 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
+        when (checkNotNull(intent.extras)[USER_TYPE]) {
+            USER_BASIC -> getString(R.string.login_user_with_nothing)
+            USER_WITH_BANCONTACT -> getString(R.string.login_user_with_bancontact)
+            USER_WITH_INVESTMENTS -> getString(R.string.login_user_with_investments)
+            else -> throw IllegalArgumentException("There should be a type of user")
+        }.let { userTypeText ->
+            debug_text.text = getString(R.string.debug_text_regarding_user_type, userTypeText)
+        }
+
         username.afterTextChanged { text ->
             login_button.isEnabled = text.isNotBlank() && password.text.toString().isNotBlank()
         }
@@ -72,6 +83,7 @@ class LoginActivity : AppCompatActivity() {
             displayProgress(true)
             Handler().postDelayed({
                 goToMainActivity()
+                displayProgress(false)
             }, 2000)
         }
     }
@@ -81,11 +93,18 @@ class LoginActivity : AppCompatActivity() {
             USER_BASIC -> startActivity(Intent(this, MainActivity::class.java))
 
             USER_WITH_BANCONTACT -> {
-                // TODO Download bancontact module in background
+                modulesHandler.installModuleDeferred(
+                        ModulesContract.BancontactContract,
+                        onCompleteCallback = { Toast.makeText(this, "Complete!!", Toast.LENGTH_SHORT).show() },
+                        onSuccessCallback = { Toast.makeText(this, "Success!!", Toast.LENGTH_SHORT).show() },
+                        onFailureCallback = { Toast.makeText(this, "Failure because ${it.message}!!", Toast.LENGTH_SHORT).show() })
                 startActivity(Intent(this, MainActivity::class.java))
             }
             USER_WITH_INVESTMENTS -> {
-                // TODO Download investments module in background
+                modulesHandler.installModuleDeferred(ModulesContract.InvestmentsContract,
+                        onCompleteCallback = { Toast.makeText(this, "Complete!!", Toast.LENGTH_SHORT).show() },
+                        onSuccessCallback = { Toast.makeText(this, "Success!!", Toast.LENGTH_SHORT).show() },
+                        onFailureCallback = { Toast.makeText(this, "Failure because ${it.message}!!", Toast.LENGTH_SHORT).show() })
                 startActivity(Intent(this, MainActivity::class.java))
             }
         }

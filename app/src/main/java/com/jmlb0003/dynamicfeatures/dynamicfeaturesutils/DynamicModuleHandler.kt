@@ -34,8 +34,8 @@ class DynamicModuleHandler(
 
     fun installModule(
             moduleContract: ModulesContract,
-            onExistingModuleCallback: () -> Unit,
-            onCompleteCallback: (() -> Unit)? = null
+            onExistingModuleCallback: () -> Unit = {},
+            onCompleteCallback: () -> Unit = {}
     ) {
         // Skip loading if the module already is installed. Perform success action directly.
         if (manager.installedModules.contains(moduleContract.name)) {
@@ -47,7 +47,7 @@ class DynamicModuleHandler(
                     .build()
             manager.startInstall(request)
                     .addOnCompleteListener {
-                        onCompleteCallback?.invoke()
+                        onCompleteCallback()
                     }
         }
     }
@@ -73,6 +73,18 @@ class DynamicModuleHandler(
                 }.addOnFailureListener {
                     onErrorListener(request.moduleNames)
                 }
+    }
+
+    fun installModuleDeferred(
+            module: ModulesContract,
+            onCompleteCallback: () -> Unit = {},
+            onFailureCallback: (Exception) -> Unit = {},
+            onSuccessCallback: () -> Unit = {}
+    ) {
+        manager.deferredInstall(listOf(module.name))
+                .addOnCompleteListener { onCompleteCallback() }
+                .addOnFailureListener { onFailureCallback(it) }
+                .addOnSuccessListener { onSuccessCallback() }
     }
 
     fun installAllModulesDeferred(
