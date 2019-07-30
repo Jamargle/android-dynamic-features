@@ -1,5 +1,6 @@
 package com.jmlb0003.dynamicfeatures.main
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -14,12 +15,12 @@ import com.jmlb0003.dynamicfeatures.dynamicfeaturesutils.ModulesContract
 import com.jmlb0003.dynamicfeatures.dynamicfeaturesutils.ModulesContract.BancontactContract
 import com.jmlb0003.dynamicfeatures.dynamicfeaturesutils.ModulesContract.InvestmentsContract
 import com.jmlb0003.dynamicfeatures.dynamicfeaturesutils.ModulesContract.ZoomitContract
-import kotlinx.android.synthetic.main.activity_main.btn_install_all_deferred
 import kotlinx.android.synthetic.main.activity_main.btn_install_all_now
 import kotlinx.android.synthetic.main.activity_main.btn_request_uninstall
 import kotlinx.android.synthetic.main.activity_main.go_to_bancontact_button
 import kotlinx.android.synthetic.main.activity_main.go_to_investments_button
 import kotlinx.android.synthetic.main.activity_main.go_to_zoomit_button
+import kotlinx.android.synthetic.main.activity_main.installed_modules
 import kotlinx.android.synthetic.main.activity_main.progress_bar
 import kotlinx.android.synthetic.main.activity_main.progress_bar_view
 import kotlinx.android.synthetic.main.activity_main.progress_text
@@ -36,6 +37,11 @@ class MainActivity : AppCompatActivity() {
     }
     private val onErrorCallback: (String) -> Unit = { errorMessage ->
         toastAndLog(errorMessage)
+        updateInstalledModulesLabel()
+    }
+    private val pendingInstallCallback: (String) -> Unit = { message ->
+        toastAndLog(message)
+        updateInstalledModulesLabel()
     }
     // endregion
 
@@ -46,7 +52,6 @@ class MainActivity : AppCompatActivity() {
                 R.id.go_to_zoomit_button -> loadAndLaunchModule(ZoomitContract)
                 R.id.go_to_bancontact_button -> loadAndLaunchModule(BancontactContract)
                 R.id.btn_install_all_now -> installAllFeaturesNow()
-                R.id.btn_install_all_deferred -> installAllFeaturesDeferred()
                 R.id.btn_request_uninstall -> requestUninstall()
             }
         }
@@ -56,8 +61,12 @@ class MainActivity : AppCompatActivity() {
         DynamicModuleHandler(
             manager = SplitInstallManagerFactory.create(this),
             installingModuleStateCallback = loadingStateListener,
+            installingModulePendingCallback = pendingInstallCallback,
             installingModuleUserConfirmationCallback = onUserConfirmationCallback,
-            installingModuleOnModuleReadyToLoad = { contract -> onModuleSuccessfulLoad(contract) },
+            installingModuleOnModuleReadyToLoad = { contract ->
+                onModuleSuccessfulLoad(contract)
+                updateInstalledModulesLabel()
+            },
             installingModuleOnModulesSuccessfulInstalled = { onModulesSuccessfulLoad() },
             installingModuleErrorCallback = onErrorCallback
         )
@@ -67,6 +76,25 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initializeViews()
+        checkModulesToBeInstalled()
+    }
+
+    private fun checkModulesToBeInstalled() {
+        when (intent.extras?.get(USER_TYPE)) {
+            USER_WITH_BANCONTACT -> {
+                modulesHandler.installModuleDeferred(
+                    BancontactContract,
+                    onCompleteCallback = { Toast.makeText(this, "Bancontact install Complete!!", Toast.LENGTH_LONG).show() },
+                    onSuccessCallback = { Toast.makeText(this, "Bancontact install Success!!", Toast.LENGTH_LONG).show() },
+                    onFailureCallback = { Toast.makeText(this, "Bancontact install Failure because ${it.message}!!", Toast.LENGTH_LONG).show() })
+            }
+            USER_WITH_INVESTMENTS -> {
+                modulesHandler.installModuleDeferred(InvestmentsContract,
+                    onCompleteCallback = { Toast.makeText(this, "Investments install Complete!!", Toast.LENGTH_LONG).show() },
+                    onSuccessCallback = { Toast.makeText(this, "Investments install Success!!", Toast.LENGTH_LONG).show() },
+                    onFailureCallback = { Toast.makeText(this, "Investments install Failure because ${it.message}!!", Toast.LENGTH_LONG).show() })
+            }
+        }
     }
 
     override fun onResume() {
@@ -86,8 +114,8 @@ class MainActivity : AppCompatActivity() {
         go_to_zoomit_button.setOnClickListener(clickListener)
         go_to_bancontact_button.setOnClickListener(clickListener)
         btn_install_all_now.setOnClickListener(clickListener)
-        btn_install_all_deferred.setOnClickListener(clickListener)
         btn_request_uninstall.setOnClickListener(clickListener)
+        updateInstalledModulesLabel()
     }
 
     /**
@@ -115,17 +143,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     *  Install all features deferred.
-     */
-    private fun installAllFeaturesDeferred() {
-        modulesHandler.installAllModulesDeferred({ modules ->
-            toastAndLog("Deferred installation of $modules")
-        }, { modules ->
-            toastAndLog("Failed installation of $modules")
-        })
-    }
-
-    /**
      * Request uninstall of all features.
      */
     private fun requestUninstall() {
@@ -147,7 +164,7 @@ class MainActivity : AppCompatActivity() {
         moduleContract: ModulesContract,
         launch: Boolean = true
     ) {
-
+        updateInstalledModulesLabel()
         if (launch) {
             launchActivity(moduleContract.entryActivityClassName)
         }
@@ -198,6 +215,30 @@ class MainActivity : AppCompatActivity() {
         } else {
             View.GONE
         }
+    }
+
+    private fun updateInstalledModulesLabel() {
+        installed_modules.text = getString(R.string.installed_modules, modulesHandler.getInstalledModules())
+    }
+
+    companion object {
+        private const val USER_TYPE = "key:UserType"
+        private const val USER_WITH_BANCONTACT = "param:bancontact"
+        private const val USER_WITH_INVESTMENTS = "param:investments"
+
+        fun openForBancontactUser(context: Context) =
+            Intent(context, MainActivity::class.java).apply {
+                putExtras(Bundle().apply {
+                    putString(USER_TYPE, USER_WITH_BANCONTACT)
+                })
+            }
+
+        fun openForInvestmentsUser(context: Context) =
+            Intent(context, MainActivity::class.java).apply {
+                putExtras(Bundle().apply {
+                    putString(USER_TYPE, USER_WITH_INVESTMENTS)
+                })
+            }
     }
 }
 

@@ -7,58 +7,25 @@ import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
 import com.jmlb0003.dynamicfeatures.R
-import com.jmlb0003.dynamicfeatures.dynamicfeaturesutils.DynamicModuleHandler
-import com.jmlb0003.dynamicfeatures.dynamicfeaturesutils.ModulesContract
 import com.jmlb0003.dynamicfeatures.hideKeyboard
 import com.jmlb0003.dynamicfeatures.main.MainActivity
-import kotlinx.android.synthetic.main.activity_login.buttons
 import kotlinx.android.synthetic.main.activity_login.debug_text
 import kotlinx.android.synthetic.main.activity_login.login_button
 import kotlinx.android.synthetic.main.activity_login.password
 import kotlinx.android.synthetic.main.activity_login.progress
-import kotlinx.android.synthetic.main.activity_login.progress_bar
 import kotlinx.android.synthetic.main.activity_login.progress_text
 import kotlinx.android.synthetic.main.activity_login.username
 
 class LoginActivity : AppCompatActivity() {
 
-    // region setup for InstallRequestListener
-    private val loadingStateListener: (Int, Int, String) -> Unit = { total, current, loadingMessage ->
-        displayLoadingState(total, current, loadingMessage)
-    }
-    private val onErrorCallback: (String) -> Unit = { errorMessage ->
-        Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show()
-    }
-    // endregion
-    private val modulesHandler: DynamicModuleHandler by lazy {
-        DynamicModuleHandler(
-                manager = SplitInstallManagerFactory.create(this),
-                installingModuleStateCallback = loadingStateListener,
-                installingModuleErrorCallback = onErrorCallback
-        )
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         initViews()
-    }
-
-    override fun onResume() {
-        // Listener can be registered even without directly triggering a download.
-        modulesHandler.registerListeners()
-        super.onResume()
-    }
-
-    override fun onPause() {
-        // Make sure to dispose of the installRequestListener once it's no longer needed.
-        modulesHandler.removeListeners()
-        super.onPause()
     }
 
     private fun initViews() {
@@ -77,58 +44,52 @@ class LoginActivity : AppCompatActivity() {
         password.afterTextChanged { text ->
             login_button.isEnabled = text.isNotBlank() && username.text.toString().isNotBlank()
         }
+        username.setOnEditorActionListener { _, actionId, _ ->
+            return@setOnEditorActionListener when (actionId) {
+                EditorInfo.IME_ACTION_DONE -> {
+                    doLogin()
+                    true
+                }
+                else -> false
+            }
+        }
+        password.setOnEditorActionListener { _, actionId, _ ->
+            return@setOnEditorActionListener when (actionId) {
+                EditorInfo.IME_ACTION_DONE -> {
+                    doLogin()
+                    true
+                }
+                else -> false
+            }
+        }
 
         login_button.setOnClickListener {
-            hideKeyboard()
-            displayProgress(true)
-            Handler().postDelayed({
-                goToMainActivity()
-                displayProgress(false)
-            }, 2000)
+            doLogin()
         }
+    }
+
+    private fun doLogin() {
+        hideKeyboard()
+        displayProgress(true)
+        Handler().postDelayed({
+            goToMainActivity()
+            displayProgress(false)
+        }, 2000)
     }
 
     private fun goToMainActivity() {
         when (checkNotNull(intent.extras)[USER_TYPE]) {
             USER_BASIC -> startActivity(Intent(this, MainActivity::class.java))
-
-            USER_WITH_BANCONTACT -> {
-                modulesHandler.installModuleDeferred(
-                        ModulesContract.BancontactContract,
-                        onCompleteCallback = { Toast.makeText(this, "Complete!!", Toast.LENGTH_SHORT).show() },
-                        onSuccessCallback = { Toast.makeText(this, "Success!!", Toast.LENGTH_SHORT).show() },
-                        onFailureCallback = { Toast.makeText(this, "Failure because ${it.message}!!", Toast.LENGTH_SHORT).show() })
-                startActivity(Intent(this, MainActivity::class.java))
-            }
-            USER_WITH_INVESTMENTS -> {
-                modulesHandler.installModuleDeferred(ModulesContract.InvestmentsContract,
-                        onCompleteCallback = { Toast.makeText(this, "Complete!!", Toast.LENGTH_SHORT).show() },
-                        onSuccessCallback = { Toast.makeText(this, "Success!!", Toast.LENGTH_SHORT).show() },
-                        onFailureCallback = { Toast.makeText(this, "Failure because ${it.message}!!", Toast.LENGTH_SHORT).show() })
-                startActivity(Intent(this, MainActivity::class.java))
-            }
-        }
-    }
-
-    private fun displayLoadingState(
-            totalProgress: Int,
-            currentProgress: Int,
-            message: String
-    ) {
-        displayProgress(true, message)
-        with(progress_bar) {
-            max = totalProgress
-            progress = currentProgress
+            USER_WITH_BANCONTACT -> startActivity(MainActivity.openForBancontactUser(this))
+            USER_WITH_INVESTMENTS -> startActivity(MainActivity.openForInvestmentsUser(this))
         }
     }
 
     private fun displayProgress(isVisible: Boolean = true, message: String? = null) {
         progress.visibility = if (isVisible) {
             progress_text.text = message
-            buttons.visibility = View.GONE
             View.VISIBLE
         } else {
-            buttons.visibility = View.VISIBLE
             View.GONE
         }
     }

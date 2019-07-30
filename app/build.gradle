@@ -10,7 +10,7 @@ android {
         applicationId names.applicationId
         minSdkVersion versions.minSdk
         targetSdkVersion versions.targetSdk
-        versionCode 3
+        versionCode 6
         versionName "1.2"
     }
 

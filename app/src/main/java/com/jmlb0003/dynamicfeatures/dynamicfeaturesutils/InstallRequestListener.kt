@@ -9,6 +9,7 @@ import com.jmlb0003.dynamicfeatures.dynamicfeaturesutils.ModulesContract.ZoomitC
 
 class InstallRequestListener(
         private val loadingStateCallback: (Int, Int, String) -> Unit,
+        private val onPendingCallback: (String) -> Unit,
         private val onUserConfirmationCallback: (SplitInstallSessionState) -> Unit,
         private val onModuleReadyToLoad: (ModulesContract) -> Unit,
         private val onModulesSuccessfulInstalled: (String) -> Unit,
@@ -18,7 +19,8 @@ class InstallRequestListener(
     override fun onStateUpdate(state: SplitInstallSessionState) {
         val names = state.moduleNames().joinToString(" - ")
         when (state.status()) {
-            SplitInstallSessionStatus.DOWNLOADING -> {
+            SplitInstallSessionStatus.DOWNLOADING,
+            SplitInstallSessionStatus.DOWNLOADED -> {
                 //  In order to see this, the application has to be uploaded to the Play Store.
                 sendLoadingStateCallback(state, "Downloading $names")
             }
@@ -31,6 +33,7 @@ class InstallRequestListener(
                  */
                 onUserConfirmationCallback(state)
             }
+            SplitInstallSessionStatus.PENDING -> onPendingCallback("Installation of ${state.moduleNames()} is pending")
             SplitInstallSessionStatus.INSTALLED -> handleModuleInstalled(state, names)
             SplitInstallSessionStatus.INSTALLING -> sendLoadingStateCallback(state, "Installing $names")
             SplitInstallSessionStatus.CANCELED,

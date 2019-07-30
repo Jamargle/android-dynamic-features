@@ -6,23 +6,23 @@
     <string name="user_with_nothing">User with nothing</string>
 
     <string name="debug_text_regarding_user_type">You will log in with %1s</string>
-    <string name="login_user_with_nothing">User with no extra features</string>
-    <string name="login_user_with_bancontact">User with Bancontact</string>
-    <string name="login_user_with_investments">User with Investments</string>
+    <string name="login_user_with_nothing">User with no extra features.\nSo the minimum app size for you.</string>
+    <string name="login_user_with_bancontact">User with Bancontact.\nSo base app + bancontact module (to be downloaded after login the first time)</string>
+    <string name="login_user_with_investments">User with Investments\nSo base app + investments module (to be downloaded after login the first time)</string>
     <string name="title_activity_login">Sign in</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in</string>
     <string name="action_sign_in_short">Sign in</string>
 
+    <string name="instructions">Press a button to perform an action.</string>
+    <string name="installed_modules">Curent installed modules: %1s</string>
     <string name="load_feature_investments">Start Investments Feature</string>
     <string name="load_feature_zoomit">Start Zoomit Feature</string>
     <string name="load_bancontact_code">Start Bancontact Feature</string>
-    <string name="load_assets">Show assets</string>
-    <string name="loading">Loading</string>
-    <string name="instructions">Press a button to perform an action.</string>
     <string name="install_all_features_now">Install all features now</string>
     <string name="load_all_features_deferred">Load all features deferred</string>
     <string name="install_all_deferred">Install deferred</string>
     <string name="request_uninstall">Request module uninstall</string>
+    <string name="loading">Loading</string>
 </resources>

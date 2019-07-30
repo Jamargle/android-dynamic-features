@@ -10,6 +10,7 @@ import com.jmlb0003.dynamicfeatures.dynamicfeaturesutils.ModulesContract.ZoomitC
 class DynamicModuleHandler(
         private val manager: SplitInstallManager,
         installingModuleStateCallback: (Int, Int, String) -> Unit,
+        installingModulePendingCallback: (String) -> Unit = {},
         installingModuleUserConfirmationCallback: (SplitInstallSessionState) -> Unit = {},
         installingModuleOnModuleReadyToLoad: (ModulesContract) -> Unit = {},
         installingModuleOnModulesSuccessfulInstalled: (String) -> Unit = {},
@@ -18,6 +19,7 @@ class DynamicModuleHandler(
     /** Listener used to handle changes in state for install requests. */
     private val installRequestListener = InstallRequestListener(
             installingModuleStateCallback,
+            installingModulePendingCallback,
             installingModuleUserConfirmationCallback,
             installingModuleOnModuleReadyToLoad,
             installingModuleOnModulesSuccessfulInstalled,
@@ -31,6 +33,8 @@ class DynamicModuleHandler(
     fun removeListeners() {
         manager.unregisterListener(installRequestListener)
     }
+
+    fun getInstalledModules() = manager.installedModules.toList()
 
     fun installModule(
             moduleContract: ModulesContract,
