@@ -1,21 +1,20 @@
-<!--
-  ~ Copyright 2018 Google LLC.
-  ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License");
-  ~ you may not use this file except in compliance with the License.
-  ~ You may obtain a copy of the License at
-  ~
-  ~    http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS,
-  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
-  -->
-
 <resources>
     <string name="app_name">On Demand Sample</string>
+
+    <string name="investments_user">Investments User</string>
+    <string name="bancontact_user">Bancontact User</string>
+    <string name="user_with_nothing">User with nothing</string>
+
+    <string name="debug_text_regarding_user_type">You will log in with %1s</string>
+    <string name="login_user_with_nothing">User with no extra features</string>
+    <string name="login_user_with_bancontact">User with Bancontact</string>
+    <string name="login_user_with_investments">User with Investments</string>
+    <string name="title_activity_login">Sign in</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_sign_in_short">Sign in</string>
+
     <string name="load_feature_investments">Start Investments Feature</string>
     <string name="load_feature_zoomit">Start Zoomit Feature</string>
     <string name="load_bancontact_code">Start Bancontact Feature</string>
