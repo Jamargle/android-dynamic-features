@@ -82,17 +82,16 @@ class MainActivity : AppCompatActivity() {
     private fun checkModulesToBeInstalled() {
         when (intent.extras?.get(USER_TYPE)) {
             USER_WITH_BANCONTACT -> {
-                modulesHandler.installModuleDeferred(
-                    BancontactContract,
-                    onCompleteCallback = { Toast.makeText(this, "Bancontact install Complete!!", Toast.LENGTH_LONG).show() },
-                    onSuccessCallback = { Toast.makeText(this, "Bancontact install Success!!", Toast.LENGTH_LONG).show() },
-                    onFailureCallback = { Toast.makeText(this, "Bancontact install Failure because ${it.message}!!", Toast.LENGTH_LONG).show() })
+                modulesHandler.installModule(
+                        BancontactContract,
+                        onCompleteCallback = { Toast.makeText(this, "Bancontact install Complete!!", Toast.LENGTH_LONG).show() },
+                        onExistingModuleCallback = { Toast.makeText(this, "Bancontact install Success!!", Toast.LENGTH_LONG).show() })
             }
             USER_WITH_INVESTMENTS -> {
-                modulesHandler.installModuleDeferred(InvestmentsContract,
-                    onCompleteCallback = { Toast.makeText(this, "Investments install Complete!!", Toast.LENGTH_LONG).show() },
-                    onSuccessCallback = { Toast.makeText(this, "Investments install Success!!", Toast.LENGTH_LONG).show() },
-                    onFailureCallback = { Toast.makeText(this, "Investments install Failure because ${it.message}!!", Toast.LENGTH_LONG).show() })
+                modulesHandler.installModule(
+                        InvestmentsContract,
+                        onCompleteCallback = { Toast.makeText(this, "Investments install Complete!!", Toast.LENGTH_LONG).show() },
+                        onExistingModuleCallback = { Toast.makeText(this, "Investments install Success!!", Toast.LENGTH_LONG).show() })
             }
         }
     }
