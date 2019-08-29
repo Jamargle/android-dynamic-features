@@ -45,14 +45,22 @@ class MainActivity : AppCompatActivity() {
     }
     // endregion
 
+    // todo 1 - quitar los botones de instalar todos y desinstalar
+
+    // todo 2 - quitar que se abra el modulo cuando se entra... que cuando entre en investments,
+    //  se instala, se avisa de que se esta instalando, pero no se entra
+
+    // todo 3 - quitar que se descargue bancontact directamente, que se haga en deferred para que
+    //  no necesite confirmacion del usuario
+
     private val clickListener by lazy {
         View.OnClickListener {
             when (it.id) {
                 R.id.go_to_investments_button -> loadAndLaunchModule(InvestmentsContract)
                 R.id.go_to_zoomit_button -> loadAndLaunchModule(ZoomitContract)
                 R.id.go_to_bancontact_button -> loadAndLaunchModule(BancontactContract)
-                R.id.btn_install_all_now -> installAllFeaturesNow()
-                R.id.btn_request_uninstall -> requestUninstall()
+//                R.id.btn_install_all_now -> installAllFeaturesNow()
+//                R.id.btn_request_uninstall -> requestUninstall()
             }
         }
     }
